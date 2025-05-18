@@ -6,11 +6,19 @@ var camera = new THREE.PerspectiveCamera(45, window.innerWidth /
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor(new THREE.Color(0x000000));
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
 
 var tetraGeometry = new THREE.TetrahedronGeometry(7);
 var boids = [];
 
 function init() {
+
+    var spotLight = new THREE.SpotLight(0xFFFFFF);
+    spotLight.position.set(-40, 40, -15);
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+    spotLight.shadow.camera.far = 130;
+    spotLight.shadow.camera.near = 40;
 
     var axes = new THREE.AxesHelper(20);
     scene.add(axes);
@@ -25,7 +33,7 @@ function init() {
     scene.add(plane);
 
     // throw a tetrahedron in there
-    var tetraMaterial = new THREE.MeshBasicMaterial({
+    var tetraMaterial = new THREE.MeshLambertMaterial({
         color: 0x12a4b9,
     });
     var tetrahedron = new THREE.Mesh(tetraGeometry, tetraMaterial);
@@ -63,7 +71,7 @@ function spawnBoid(maxX, maxY, maxZ) {
     var yPos = Math.random() * maxY;
     var zPos = Math.random() * maxZ;
 
-    var material = new THREE.MeshBasicMaterial({
+    var material = new THREE.MeshLambertMaterial({
         color: 0x12a4b9
     });
     var tetrahedron = new THREE.Mesh(tetraGeometry, material);
